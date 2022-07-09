@@ -10,6 +10,7 @@ export interface IDataSources {
 	artistAPI: {
 		getAllArtists(): Promise<Artist[]>;
 		getArtist(id: number): Promise<Artist>;
+		createArtist(data: any): Promise<Artist>;
 	};
 
 	bandAPI: {
@@ -98,11 +99,22 @@ export const resolvers = {
 		},
 	},
 
-	Artist: {},
-	User: {},
-	Band: {},
-	Genre: {},
-	Track: {},
-	Favourites: {},
-	Album: {},
+	Mutation: {
+		createArtist: (
+			context: any,
+			data: any,
+			{ dataSources, ...rest }: { dataSources: IDataSources },
+			ctx: any,
+		): Promise<Artist> => {
+			return dataSources.artistAPI.createArtist(data);
+		},
+	},
+
+	Artist: { id: ({ _id }: { _id: string }): string => _id },
+	User: { id: ({ _id }: { _id: string }): string => _id },
+	Band: { id: ({ _id }: { _id: string }): string => _id },
+	Genre: { id: ({ _id }: { _id: string }): string => _id },
+	Track: { id: ({ _id }: { _id: string }): string => _id },
+	Favourites: { id: ({ _id }: { _id: string }): string => _id },
+	Album: { id: ({ _id }: { _id: string }): string => _id },
 };

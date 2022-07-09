@@ -21,6 +21,9 @@ const server = new ApolloServer({
 		trackAPI: new TrackAPI(),
 		userAPI: new UserAPI(),
 	}),
+	context: ({ req }) => ({
+		token: req.headers.authorization,
+	}),
 });
 
 server

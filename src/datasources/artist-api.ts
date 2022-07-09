@@ -22,4 +22,10 @@ export class ArtistAPI extends RESTDataSource {
 		const artist = await this.get(`artists/${artistId}`);
 		return artist || null;
 	}
+
+	async createArtist(data: any): Promise<Artist> {
+		const artist = await this.post(`artists`, data);
+
+		return artist || null;
+	}
 }
