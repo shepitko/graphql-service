@@ -1,20 +1,5 @@
-import { RESTDataSource } from 'apollo-datasource-rest';
-
-export interface IArtist {
-	// id: Number;
-	firstName: String;
-	secondName: String;
-	middleName: String;
-	birthDate: String;
-	birthPlace: String;
-	deathDate: String;
-	deathPlace: String;
-	country: String;
-	bands: String;
-	instruments: String;
-	pseudonims: String;
-	labels: String;
-}
+import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
+import { Artist } from '../types/Artist.t';
 
 export class ArtistAPI extends RESTDataSource {
 	constructor() {
@@ -23,13 +8,18 @@ export class ArtistAPI extends RESTDataSource {
 		this.baseURL = 'http://localhost:3002/v1/';
 	}
 
-	async getAllArtists(): Promise<IArtist[]> {
-		const artists = await this.get('artists');
-
-		return artists.items;
+	willSendRequest(request: RequestOptions): void {
+		request.headers.set('Authorization', this.context.token);
 	}
 
-	getArtist(artistId: Number): Promise<IArtist> {
-		return this.get(`artists/${artistId}`);
+	async getAllArtists(): Promise<Artist[]> {
+		const artists = await this.get('artists');
+
+		return artists.items || [];
+	}
+
+	async getArtist(artistId: number): Promise<Artist> {
+		const artist = await this.get(`artists/${artistId}`);
+		return artist || null;
 	}
 }
