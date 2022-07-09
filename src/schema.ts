@@ -18,45 +18,98 @@ export const typeDefs = gql`
 		favourites: [Favourites]
 	}
 
-	"""
 	type Mutation {
-		"Artists"
-		createArtist(): Artist
-		deleteArtist(): Artist
-		updateArtist(): Artist
+		createArtist(
+			firstName: String
+			secondName: String
+			middleName: String
+			birthDate: String
+			birthPlace: String
+			deathDate: String
+			deathPlace: String
+			country: String
+			bands: String
+			instruments: String
+			pseudonims: String
+			labels: String
+		): Artist
+		deleteArtist(id: ID!): Artist
+		updateArtist(
+			id: ID!
+			firstName: String
+			secondName: String
+			middleName: String
+			birthDate: String
+			birthPlace: String
+			deathDate: String
+			deathPlace: String
+			country: String
+			bands: String
+			instruments: String
+			pseudonims: String
+			labels: String
+		): Artist
 
-		"Genres"
-		createGenre(): Genre
-		deleteGenre(): Genre
-		updateGenre(): Genre
+		createGenre(name: String, description: String, country: String, year: Int): Genre
+		deleteGenre(id: ID!): Genre
+		updateGenre(id: ID!, name: String, description: String, country: String, year: Int): Genre
 
-		"Bands"
-		createBand(): Band
-		deleteBand(): Band
-		updateBand(): Band
+		createBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
+		deleteBand(id: ID!): Band
+		updateBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
 
-		"Tracks"
-		createTrack(): Track
-		deleteTrack(): Track
-		updateTrack(): Track
+		createTrack(
+			title: String!
+			albumId: ID
+			artistIds: [ID]
+			genreIds: [ID]
+			bandIds: [ID]
+			duration: Int
+			released: Int
+		): Track
+		deleteTrack(id: ID!): Track
+		updateTrack(
+			id: ID!
+			title: String!
+			albumId: ID
+			artistIds: [ID]
+			genreIds: [ID]
+			bandIds: [ID]
+			duration: Int
+			released: Int
+		): Track
 
-		"Albums"
-		createAlbum(): Album
-		deleteAlbum(): Album
-		updateAlbum(): Album
+		createAlbum(
+			name: String
+			released: Int
+			artistIds: [ID]
+			bandIds: [ID]
+			trackIds: [ID]
+			genreIds: [ID]
+			image: String
+		): Album
+		deleteAlbum(id: ID!): Album
+		updateAlbum(
+			id: ID!
+			name: String
+			released: Int
+			artistIds: [ID]
+			bandIds: [ID]
+			trackIds: [ID]
+			genreIds: [ID]
+			image: String
+		): Album
 
-		"Users"
-		register(): User
+		register(id: ID!, firstName: String, secondName: String, password: String, email: String!): User
 
-		"Favourites"
-		addTrackToFavourites(): Favourites
-		addBandToFavourites(): Favourites
-		addArtistToFavourites(): Favourites
-		addGenreToFavourites(): Favourites
+		addTrackToFavourites(userId: ID, trackIds: [ID!]): Favourites
+		addBandToFavourites(userId: ID, bandIds: [ID!]): Favourites
+		addArtistToFavourites(userId: ID, artistIds: [ID!]): Favourites
+		addGenreToFavourites(userId: ID, genreIds: [ID!]): Favourites
 	}
-	"""
+
 	type Artist {
-		_id: ID!
+		id: ID!
 		firstName: String
 		secondName: String
 		middleName: String
@@ -93,10 +146,10 @@ export const typeDefs = gql`
 		title: String!
 		album: Album
 		artists: [Artist]
+		genres: [Genre]
 		bands: [Band]
 		duration: Int
 		released: Int
-		genres: [Genre]
 	}
 
 	type Band {
