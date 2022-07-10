@@ -221,7 +221,7 @@ export const resolvers = {
 	Artist: {
 		id: ({ _id }: { _id: string }): string => _id,
 		bands(artist: Artist, args: any, { dataSources }: { dataSources: IDataSources }): Promise<any> {
-			return Promise.all(artist.bands.map((bandId: string) => dataSources.bandAPI.getBand(bandId)));
+			return Promise.all(artist.bandsIds.map((bandId: string) => dataSources.bandAPI.getBand(bandId)));
 		},
 	},
 	User: { id: ({ _id }: { _id: string }): string => _id },
