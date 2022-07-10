@@ -30,7 +30,7 @@ export const typeDefs = gql`
 			birthDate: String
 			birthPlace: String
 			country: String
-			bandIds: [ID]
+			bandsIds: [ID]
 			instruments: [String]
 		): Artist
 		deleteArtist(id: ID!): Response
@@ -42,7 +42,7 @@ export const typeDefs = gql`
 			birthDate: String
 			birthPlace: String
 			country: String
-			bandIds: [ID]
+			bandsIds: [ID]
 			instruments: [String]
 		): Artist
 
@@ -57,9 +57,9 @@ export const typeDefs = gql`
 		createTrack(
 			title: String!
 			albumId: ID
-			artistIds: [ID]
+			artistsIds: [ID]
 			genresIds: [ID]
-			bandIds: [ID]
+			bandsIds: [ID]
 			duration: Int
 			released: Int
 		): Track
@@ -68,9 +68,9 @@ export const typeDefs = gql`
 			id: ID!
 			title: String!
 			albumId: ID
-			artistIds: [ID]
+			artistsIds: [ID]
 			genresIds: [ID]
-			bandIds: [ID]
+			bandsIds: [ID]
 			duration: Int
 			released: Int
 		): Track
@@ -78,9 +78,9 @@ export const typeDefs = gql`
 		createAlbum(
 			name: String
 			released: Int
-			artistIds: [ID]
-			bandIds: [ID]
-			trackIds: [ID]
+			artistsIds: [ID]
+			bandsIds: [ID]
+			tracksIds: [ID]
 			genresIds: [ID]
 			image: String
 		): Album
@@ -89,9 +89,9 @@ export const typeDefs = gql`
 			id: ID!
 			name: String
 			released: Int
-			artistIds: [ID]
-			bandIds: [ID]
-			trackIds: [ID]
+			artisstIds: [ID]
+			bandsIds: [ID]
+			tracksIds: [ID]
 			genresIds: [ID]
 			image: String
 		): Album
@@ -99,8 +99,8 @@ export const typeDefs = gql`
 		register(id: ID!, firstName: String, secondName: String, password: String, email: String!): User
 
 		addTrackToFavourites(userId: ID, trackIds: [ID!]): Favourites
-		addBandToFavourites(userId: ID, bandIds: [ID!]): Favourites
-		addArtistToFavourites(userId: ID, artistIds: [ID!]): Favourites
+		addBandToFavourites(userId: ID, bandsIds: [ID!]): Favourites
+		addArtistToFavourites(userId: ID, artistsIds: [ID!]): Favourites
 		addGenreToFavourites(userId: ID, genresIds: [ID!]): Favourites
 	}
 

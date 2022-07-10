@@ -58,10 +58,14 @@ export interface IDataSources {
 		getJwt(): Promise<string>;
 
 		getUser(id: string): Promise<User>;
+
+		register(data: any): Promise<User>;
 	};
 
 	favouritesAPI: {
 		getAllFavourites(): Promise<Favourite[]>;
+
+		addSomethingToFavourites(data: any): Promise<Favourite>;
 	};
 }
 
@@ -173,17 +177,51 @@ export const resolvers = {
 			const { id } = data;
 			return dataSources.bandAPI.deleteBand(id);
 		},
+
+		createAlbum: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Album> => {
+			return dataSources.albumAPI.createAlbum(data);
+		},
+		updateAlbum: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Album> => {
+			return dataSources.albumAPI.updateAlbum(data);
+		},
+		deleteAlbum: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
+			const { id } = data;
+			return dataSources.albumAPI.deleteAlbum(id);
+		},
+
+		createTrack: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Track> => {
+			return dataSources.trackAPI.createTrack(data);
+		},
+		updateTrack: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Track> => {
+			return dataSources.trackAPI.updateTrack(data);
+		},
+		deleteTrack: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
+			const { id } = data;
+			return dataSources.trackAPI.deleteTrack(id);
+		},
+
+		register: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<User> => {
+			return dataSources.userAPI.register(data);
+		},
+
+		addTrackToFavourites: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Favourite> => {
+			return dataSources.favouritesAPI.addSomethingToFavourites(data);
+		},
+		addBandToFavourites: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Favourite> => {
+			return dataSources.favouritesAPI.addSomethingToFavourites(data);
+		},
+		addArtistToFavourites: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Favourite> => {
+			return dataSources.favouritesAPI.addSomethingToFavourites(data);
+		},
+		addGenreToFavourites: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Favourite> => {
+			return dataSources.favouritesAPI.addSomethingToFavourites(data);
+		},
 	},
 
 	Artist: {
 		id: ({ _id }: { _id: string }): string => _id,
 		bands(artist: Artist, args: any, { dataSources }: { dataSources: IDataSources }): Promise<any> {
-			return (
-				Promise.all(artist?.bands?.map((band: Band): Promise<Band> => dataSources.bandAPI.getBand(band._id))) || []
-			);
-		},
-		instruments(artist: Artist, args: any, { dataSources }: { dataSources: IDataSources }): string[] {
-			return artist.instruments;
+			return Promise.all(artist.bands.map((bandId: string) => dataSources.bandAPI.getBand(bandId)));
 		},
 	},
 	User: { id: ({ _id }: { _id: string }): string => _id },

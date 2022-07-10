@@ -18,4 +18,10 @@ export class UserAPI extends RESTDataSource {
 
 		return user.token;
 	}
+
+	async register(data: any): Promise<User> {
+		const user = await this.get(`users/register`, data);
+
+		return user;
+	}
 }

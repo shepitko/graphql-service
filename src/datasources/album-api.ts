@@ -38,7 +38,7 @@ export class AlbumAPI extends RESTDataSource {
 	}
 
 	async deleteAlbum(id: any): Promise<Response> {
-		const reponse = await this.delete(`genres/${id}`);
+		const reponse = await this.delete(`albums/${id}`);
 
 		return reponse;
 	}

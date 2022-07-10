@@ -5,7 +5,6 @@ import { PaginatedReponse } from '../types/PaginatedResponse.t';
 export class FavouritesAPI extends RESTDataSource {
 	constructor() {
 		super();
-		// the Catstronauts catalog is hosted on this server
 		this.baseURL = 'http://localhost:3007/v1/';
 	}
 
@@ -17,5 +16,11 @@ export class FavouritesAPI extends RESTDataSource {
 		const favourites = await this.get('favourites', { limit, offset });
 
 		return favourites;
+	}
+
+	async addSomethingToFavourites(data: any): Promise<Favourite> {
+		const favourite = await this.get('favourites/add', data);
+
+		return favourite;
 	}
 }
