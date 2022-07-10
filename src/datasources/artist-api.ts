@@ -1,10 +1,10 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { Artist } from '../types/Artist.t';
+import { Response } from '../types/Response.t';
 
 export class ArtistAPI extends RESTDataSource {
 	constructor() {
 		super();
-		// the Catstronauts catalog is hosted on this server
 		this.baseURL = 'http://localhost:3002/v1/';
 	}
 
@@ -27,5 +27,18 @@ export class ArtistAPI extends RESTDataSource {
 		const artist = await this.post(`artists`, data);
 
 		return artist || null;
+	}
+
+	async updateArtist(data: any): Promise<Artist> {
+		const { id, ...rest } = data;
+		const artist = await this.put(`artists/${id}`, rest);
+
+		return artist || null;
+	}
+
+	async deleteArtist(id: any): Promise<Response> {
+		const reponse = await this.delete(`artists/${id}`);
+
+		return reponse;
 	}
 }

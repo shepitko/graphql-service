@@ -3,6 +3,7 @@ import { Artist } from './types/Artist.t';
 import { Band } from './types/Band.t';
 import { Favourite } from './types/Favourite.t';
 import { Genre } from './types/Genre.t';
+import { Response } from './types/Response.t';
 import { Track } from './types/Track.t';
 import { User } from './types/User.t';
 
@@ -10,27 +11,46 @@ export interface IDataSources {
 	artistAPI: {
 		getAllArtists(): Promise<Artist[]>;
 		getArtist(id: number): Promise<Artist>;
+
 		createArtist(data: any): Promise<Artist>;
+		updateArtist(data: any): Promise<Artist>;
+		deleteArtist(id: string): Promise<Response>;
 	};
 
 	bandAPI: {
 		getAllBands(): Promise<Band[]>;
 		getBand(id: number): Promise<Band>;
+
+		createBand(data: any): Promise<Band>;
+		updateBand(data: any): Promise<Band>;
+		deleteBand(id: string): Promise<Response>;
 	};
 
 	genreAPI: {
 		getAllGenres(): Promise<Genre[]>;
 		getGenre(id: number): Promise<Genre>;
+
+		createGenre(data: any): Promise<Genre>;
+		updateGenre(data: any): Promise<Genre>;
+		deleteGenre(id: string): Promise<Response>;
 	};
 
 	albumAPI: {
 		getAllAlbums(): Promise<Album[]>;
 		getAlbum(id: number): Promise<Album>;
+
+		createAlbum(data: any): Promise<Album>;
+		updateAlbum(data: any): Promise<Album>;
+		deleteAlbum(id: string): Promise<Response>;
 	};
 
 	trackAPI: {
 		getAllTracks(): Promise<Track[]>;
 		getTrack(id: number): Promise<Track>;
+
+		createTrack(data: any): Promise<Track>;
+		updateTrack(data: any): Promise<Track>;
+		deleteTrack(id: string): Promise<Response>;
 	};
 
 	userAPI: {
@@ -100,13 +120,30 @@ export const resolvers = {
 	},
 
 	Mutation: {
-		createArtist: (
-			context: any,
-			data: any,
-			{ dataSources, ...rest }: { dataSources: IDataSources },
-			ctx: any,
-		): Promise<Artist> => {
+		createArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
 			return dataSources.artistAPI.createArtist(data);
+		},
+
+		updateArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
+			return dataSources.artistAPI.updateArtist(data);
+		},
+
+		deleteArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
+			const { id } = data;
+			return dataSources.artistAPI.deleteArtist(id);
+		},
+
+		createGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
+			return dataSources.genreAPI.createGenre(data);
+		},
+
+		updateGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
+			return dataSources.genreAPI.updateGenre(data);
+		},
+
+		deleteGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
+			const { id } = data;
+			return dataSources.genreAPI.deleteGenre(id);
 		},
 	},
 

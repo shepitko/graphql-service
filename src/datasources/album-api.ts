@@ -4,7 +4,6 @@ import { Album } from '../types/Album.t';
 export class AlbumAPI extends RESTDataSource {
 	constructor() {
 		super();
-		// the Catstronauts catalog is hosted on this server
 		this.baseURL = 'http://localhost:3005/v1/';
 	}
 
@@ -22,5 +21,24 @@ export class AlbumAPI extends RESTDataSource {
 		const album = await this.get(`albums/${albumId}`);
 
 		return album || null;
+	}
+
+	async createAlbum(data: any): Promise<Album> {
+		const album = await this.post(`albums`, data);
+
+		return album || null;
+	}
+
+	async updateAlbum(data: any): Promise<Album> {
+		const { id, ...rest } = data;
+		const album = await this.put(`albums/${id}`, rest);
+
+		return album || null;
+	}
+
+	async deleteAlbum(id: any): Promise<Response> {
+		const reponse = await this.delete(`genres/${id}`);
+
+		return reponse;
 	}
 }

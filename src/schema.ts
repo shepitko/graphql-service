@@ -33,7 +33,7 @@ export const typeDefs = gql`
 			pseudonims: String
 			labels: String
 		): Artist
-		deleteArtist(id: ID!): Artist
+		deleteArtist(id: ID!): Response
 		updateArtist(
 			id: ID!
 			firstName: String
@@ -51,11 +51,11 @@ export const typeDefs = gql`
 		): Artist
 
 		createGenre(name: String, description: String, country: String, year: Int): Genre
-		deleteGenre(id: ID!): Genre
+		deleteGenre(id: ID!): Response
 		updateGenre(id: ID!, name: String, description: String, country: String, year: Int): Genre
 
 		createBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
-		deleteBand(id: ID!): Band
+		deleteBand(id: ID!): Response
 		updateBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
 
 		createTrack(
@@ -67,7 +67,7 @@ export const typeDefs = gql`
 			duration: Int
 			released: Int
 		): Track
-		deleteTrack(id: ID!): Track
+		deleteTrack(id: ID!): Response
 		updateTrack(
 			id: ID!
 			title: String!
@@ -88,7 +88,7 @@ export const typeDefs = gql`
 			genreIds: [ID]
 			image: String
 		): Album
-		deleteAlbum(id: ID!): Album
+		deleteAlbum(id: ID!): Response
 		updateAlbum(
 			id: ID!
 			name: String
@@ -117,7 +117,7 @@ export const typeDefs = gql`
 		birthPlace: String
 		deathDate: String
 		deathPlace: String
-		country: String
+		country: String!
 		bands: String
 		instruments: String
 		pseudonims: String
@@ -187,5 +187,10 @@ export const typeDefs = gql`
 		genres: [Genre]
 		artists: [Artist]
 		tracks: [Track]
+	}
+
+	type Response {
+		acknowledged: Boolean
+		deletedCount: Int
 	}
 `;
