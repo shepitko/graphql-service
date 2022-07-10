@@ -2,20 +2,24 @@ import { gql } from 'apollo-server';
 
 export const typeDefs = gql`
 	type Query {
-		"Fetch a specific artist"
+		artists(limit: Int, offset: Int): PaginatedArtists
 		artist(id: ID!): Artist
-		artists: [Artist]
+
+		genres(limit: Int, offset: Int): PaginatedGenres
 		genre(id: ID!): Genre
-		genres: [Genre]
+
+		tracks(limit: Int, offset: Int): PaginatedTracks
 		track(id: ID!): Track
-		tracks: [Track]
+
+		bands: PaginatedBands
 		band(id: ID!): Band
-		bands: [Band]
+
+		albums: PaginatedAlbums
 		album(id: ID!): Album
-		albums: [Album]
+
 		jwt: String
 		user(id: ID!): User
-		favourites: [Favourites]
+		favourites: PaginatedFavourites
 	}
 
 	type Mutation {
@@ -25,13 +29,9 @@ export const typeDefs = gql`
 			middleName: String
 			birthDate: String
 			birthPlace: String
-			deathDate: String
-			deathPlace: String
 			country: String
-			bands: String
-			instruments: String
-			pseudonims: String
-			labels: String
+			bandIds: [ID]
+			instruments: [String]
 		): Artist
 		deleteArtist(id: ID!): Response
 		updateArtist(
@@ -41,28 +41,24 @@ export const typeDefs = gql`
 			middleName: String
 			birthDate: String
 			birthPlace: String
-			deathDate: String
-			deathPlace: String
 			country: String
-			bands: String
-			instruments: String
-			pseudonims: String
-			labels: String
+			bandIds: [ID]
+			instruments: [String]
 		): Artist
 
 		createGenre(name: String, description: String, country: String, year: Int): Genre
 		deleteGenre(id: ID!): Response
 		updateGenre(id: ID!, name: String, description: String, country: String, year: Int): Genre
 
-		createBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
+		createBand(name: String!, origin: String, members: [MemberInput!], website: String, genresIds: [ID]): Band
 		deleteBand(id: ID!): Response
-		updateBand(name: String, origin: String, memberIds: [ID], website: String, genreIds: [ID]): Band
+		updateBand(id: ID!, name: String, origin: String, members: [MemberInput!], website: String, genresIds: [ID]): Band
 
 		createTrack(
 			title: String!
 			albumId: ID
 			artistIds: [ID]
-			genreIds: [ID]
+			genresIds: [ID]
 			bandIds: [ID]
 			duration: Int
 			released: Int
@@ -73,7 +69,7 @@ export const typeDefs = gql`
 			title: String!
 			albumId: ID
 			artistIds: [ID]
-			genreIds: [ID]
+			genresIds: [ID]
 			bandIds: [ID]
 			duration: Int
 			released: Int
@@ -85,7 +81,7 @@ export const typeDefs = gql`
 			artistIds: [ID]
 			bandIds: [ID]
 			trackIds: [ID]
-			genreIds: [ID]
+			genresIds: [ID]
 			image: String
 		): Album
 		deleteAlbum(id: ID!): Response
@@ -96,7 +92,7 @@ export const typeDefs = gql`
 			artistIds: [ID]
 			bandIds: [ID]
 			trackIds: [ID]
-			genreIds: [ID]
+			genresIds: [ID]
 			image: String
 		): Album
 
@@ -105,7 +101,7 @@ export const typeDefs = gql`
 		addTrackToFavourites(userId: ID, trackIds: [ID!]): Favourites
 		addBandToFavourites(userId: ID, bandIds: [ID!]): Favourites
 		addArtistToFavourites(userId: ID, artistIds: [ID!]): Favourites
-		addGenreToFavourites(userId: ID, genreIds: [ID!]): Favourites
+		addGenreToFavourites(userId: ID, genresIds: [ID!]): Favourites
 	}
 
 	type Artist {
@@ -115,20 +111,19 @@ export const typeDefs = gql`
 		middleName: String
 		birthDate: String
 		birthPlace: String
-		deathDate: String
-		deathPlace: String
-		country: String!
-		bands: String
-		instruments: String
-		pseudonims: String
-		labels: String
+		country: String
+		bands: [Band]
+		instruments: [String]
 	}
 
 	type Member {
-		id: ID!
-		firstName: String
-		secondName: String
-		middleName: String
+		artist: String
+		instrument: String
+		years: [String]
+	}
+
+	input MemberInput {
+		artist: String
 		instrument: String
 		years: [String]
 	}
@@ -192,5 +187,53 @@ export const typeDefs = gql`
 	type Response {
 		acknowledged: Boolean
 		deletedCount: Int
+	}
+
+	interface PaginatedResponse {
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedArtists implements PaginatedResponse {
+		items: [Artist]
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedAlbums implements PaginatedResponse {
+		items: [Album]
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedBands implements PaginatedResponse {
+		items: [Band]
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedGenres implements PaginatedResponse {
+		items: [Genre]
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedTracks implements PaginatedResponse {
+		items: [Track]
+		offset: Int
+		limit: Int
+		total: Int
+	}
+
+	type PaginatedFavourites implements PaginatedResponse {
+		items: [Favourites]
+		offset: Int
+		limit: Int
+		total: Int
 	}
 `;

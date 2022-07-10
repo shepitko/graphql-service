@@ -1,5 +1,6 @@
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { Favourite } from '../types/Favourite.t';
+import { PaginatedReponse } from '../types/PaginatedResponse.t';
 
 export class FavouritesAPI extends RESTDataSource {
 	constructor() {
@@ -12,9 +13,9 @@ export class FavouritesAPI extends RESTDataSource {
 		request.headers.set('Authorization', this.context.token);
 	}
 
-	async getAllFavourites(): Promise<Favourite[]> {
-		const favourites = await this.get('favourites');
+	async getAllFavourites(limit = 5, offset = 0): Promise<PaginatedReponse<Favourite>> {
+		const favourites = await this.get('favourites', { limit, offset });
 
-		return favourites.items || [];
+		return favourites;
 	}
 }

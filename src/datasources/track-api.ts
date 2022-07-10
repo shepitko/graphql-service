@@ -1,4 +1,5 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
+import { PaginatedReponse } from '../types/PaginatedResponse.t';
 import { Track } from '../types/Track.t';
 
 export class TrackAPI extends RESTDataSource {
@@ -11,10 +12,10 @@ export class TrackAPI extends RESTDataSource {
 		request.headers.set('Authorization', this.context.token);
 	}
 
-	async getAllTracks(): Promise<Track[]> {
-		const tracks = await this.get('tracks');
+	async getAllTracks(limit = 5, offset = 0): Promise<PaginatedReponse<Track>> {
+		const tracks = await this.get('tracks', { limit, offset });
 
-		return tracks.items || [];
+		return tracks;
 	}
 
 	async getTrack(trackId: number): Promise<Track> {

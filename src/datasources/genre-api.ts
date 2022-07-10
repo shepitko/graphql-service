@@ -1,5 +1,6 @@
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { Genre } from '../types/Genre.t';
+import { PaginatedReponse } from '../types/PaginatedResponse.t';
 
 class GenreAPI extends RESTDataSource {
 	constructor() {
@@ -11,13 +12,13 @@ class GenreAPI extends RESTDataSource {
 		request.headers.set('Authorization', this.context.token);
 	}
 
-	async getAllGenres(): Promise<Genre[]> {
-		const genres = await this.get('genres');
+	async getAllGenres(limit = 5, offset = 0): Promise<PaginatedReponse<Genre>> {
+		const genres = await this.get('genres', { limit, offset });
 
-		return genres.items || [];
+		return genres;
 	}
 
-	async getGenre(genreId: number): Promise<Genre> {
+	async getGenre(genreId: string): Promise<Genre> {
 		const genre = await this.get(`genres/${genreId}`);
 
 		return genre || null;

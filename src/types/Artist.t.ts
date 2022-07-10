@@ -1,3 +1,5 @@
+import { Band } from './Band.t';
+
 export interface Artist {
 	_id: string;
 	firstName: string;
@@ -7,5 +9,6 @@ export interface Artist {
 	birthPlace: string;
 	country: string;
 	bandsIds: string[];
+	bands: Band[];
 	instruments: string[];
 }

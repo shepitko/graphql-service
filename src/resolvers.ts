@@ -3,14 +3,15 @@ import { Artist } from './types/Artist.t';
 import { Band } from './types/Band.t';
 import { Favourite } from './types/Favourite.t';
 import { Genre } from './types/Genre.t';
+import { PaginatedReponse } from './types/PaginatedResponse.t';
 import { Response } from './types/Response.t';
 import { Track } from './types/Track.t';
 import { User } from './types/User.t';
 
 export interface IDataSources {
 	artistAPI: {
-		getAllArtists(): Promise<Artist[]>;
-		getArtist(id: number): Promise<Artist>;
+		getAllArtists(limit: number, offset: number): Promise<PaginatedReponse<Artist>>;
+		getArtist(id: string): Promise<Artist>;
 
 		createArtist(data: any): Promise<Artist>;
 		updateArtist(data: any): Promise<Artist>;
@@ -18,8 +19,8 @@ export interface IDataSources {
 	};
 
 	bandAPI: {
-		getAllBands(): Promise<Band[]>;
-		getBand(id: number): Promise<Band>;
+		getAllBands(limit: number, offset: number): Promise<PaginatedReponse<Band>>;
+		getBand(id: string): Promise<Band>;
 
 		createBand(data: any): Promise<Band>;
 		updateBand(data: any): Promise<Band>;
@@ -27,8 +28,8 @@ export interface IDataSources {
 	};
 
 	genreAPI: {
-		getAllGenres(): Promise<Genre[]>;
-		getGenre(id: number): Promise<Genre>;
+		getAllGenres(limit: number, offset: number): Promise<PaginatedReponse<Genre>>;
+		getGenre(id: string): Promise<Genre>;
 
 		createGenre(data: any): Promise<Genre>;
 		updateGenre(data: any): Promise<Genre>;
@@ -36,8 +37,8 @@ export interface IDataSources {
 	};
 
 	albumAPI: {
-		getAllAlbums(): Promise<Album[]>;
-		getAlbum(id: number): Promise<Album>;
+		getAllAlbums(limit: number, offset: number): Promise<PaginatedReponse<Album>>;
+		getAlbum(id: string): Promise<Album>;
 
 		createAlbum(data: any): Promise<Album>;
 		updateAlbum(data: any): Promise<Album>;
@@ -45,8 +46,8 @@ export interface IDataSources {
 	};
 
 	trackAPI: {
-		getAllTracks(): Promise<Track[]>;
-		getTrack(id: number): Promise<Track>;
+		getAllTracks(limit: number, offset: number): Promise<PaginatedReponse<Track>>;
+		getTrack(id: string): Promise<Track>;
 
 		createTrack(data: any): Promise<Track>;
 		updateTrack(data: any): Promise<Track>;
@@ -56,7 +57,7 @@ export interface IDataSources {
 	userAPI: {
 		getJwt(): Promise<string>;
 
-		getUser(id: number): Promise<User>;
+		getUser(id: string): Promise<User>;
 	};
 
 	favouritesAPI: {
@@ -66,51 +67,71 @@ export interface IDataSources {
 
 export const resolvers = {
 	Query: {
-		album: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<Album> => {
+		album: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<Album> => {
 			return dataSources.albumAPI.getAlbum(id);
 		},
 
-		albums: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<Album[]> => {
-			return dataSources.albumAPI.getAllAlbums();
+		albums: (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number },
+			{ dataSources }: { dataSources: IDataSources },
+		): Promise<PaginatedReponse<Album>> => {
+			return dataSources.albumAPI.getAllAlbums(limit, offset);
 		},
 
-		artist: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
+		artist: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
 			return dataSources.artistAPI.getArtist(id);
 		},
 
-		artists: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<Artist[]> => {
-			return dataSources.artistAPI.getAllArtists();
+		artists: (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number },
+			{ dataSources }: { dataSources: IDataSources },
+		): Promise<PaginatedReponse<Artist>> => {
+			return dataSources.artistAPI.getAllArtists(limit, offset);
 		},
 
-		band: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<Band> => {
+		band: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<Band> => {
 			return dataSources.bandAPI.getBand(id);
 		},
 
-		bands: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<Band[]> => {
-			return dataSources.bandAPI.getAllBands();
+		bands: (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number },
+			{ dataSources }: { dataSources: IDataSources },
+		): Promise<PaginatedReponse<Band>> => {
+			return dataSources.bandAPI.getAllBands(limit, offset);
 		},
 
-		genre: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
+		genre: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
 			return dataSources.genreAPI.getGenre(id);
 		},
 
-		genres: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<Genre[]> => {
-			return dataSources.genreAPI.getAllGenres();
+		genres: (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number },
+			{ dataSources }: { dataSources: IDataSources },
+		): Promise<PaginatedReponse<Genre>> => {
+			return dataSources.genreAPI.getAllGenres(limit, offset);
 		},
 
-		track: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<Track> => {
+		track: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<Track> => {
 			return dataSources.trackAPI.getTrack(id);
 		},
 
-		tracks: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<Track[]> => {
-			return dataSources.trackAPI.getAllTracks();
+		tracks: (
+			_: any,
+			{ limit, offset }: { limit: number; offset: number },
+			{ dataSources }: { dataSources: IDataSources },
+		): Promise<PaginatedReponse<Track>> => {
+			return dataSources.trackAPI.getAllTracks(limit, offset);
 		},
 
 		jwt: (_: any, __: any, { dataSources }: { dataSources: IDataSources }): Promise<string> => {
 			return dataSources.userAPI.getJwt();
 		},
 
-		user: (_: any, { id }: { id: number }, { dataSources }: { dataSources: IDataSources }): Promise<User> => {
+		user: (_: any, { id }: { id: string }, { dataSources }: { dataSources: IDataSources }): Promise<User> => {
 			return dataSources.userAPI.getUser(id);
 		},
 
@@ -123,11 +144,9 @@ export const resolvers = {
 		createArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
 			return dataSources.artistAPI.createArtist(data);
 		},
-
 		updateArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Artist> => {
 			return dataSources.artistAPI.updateArtist(data);
 		},
-
 		deleteArtist: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
 			const { id } = data;
 			return dataSources.artistAPI.deleteArtist(id);
@@ -136,20 +155,44 @@ export const resolvers = {
 		createGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
 			return dataSources.genreAPI.createGenre(data);
 		},
-
 		updateGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Genre> => {
 			return dataSources.genreAPI.updateGenre(data);
 		},
-
 		deleteGenre: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
 			const { id } = data;
 			return dataSources.genreAPI.deleteGenre(id);
 		},
+
+		createBand: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Band> => {
+			return dataSources.bandAPI.createBand(data);
+		},
+		updateBand: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Band> => {
+			return dataSources.bandAPI.updateBand(data);
+		},
+		deleteBand: (_: any, data: any, { dataSources }: { dataSources: IDataSources }): Promise<Response> => {
+			const { id } = data;
+			return dataSources.bandAPI.deleteBand(id);
+		},
 	},
 
-	Artist: { id: ({ _id }: { _id: string }): string => _id },
+	Artist: {
+		id: ({ _id }: { _id: string }): string => _id,
+		bands(artist: Artist, args: any, { dataSources }: { dataSources: IDataSources }): Promise<any> {
+			return (
+				Promise.all(artist?.bands?.map((band: Band): Promise<Band> => dataSources.bandAPI.getBand(band._id))) || []
+			);
+		},
+		instruments(artist: Artist, args: any, { dataSources }: { dataSources: IDataSources }): string[] {
+			return artist.instruments;
+		},
+	},
 	User: { id: ({ _id }: { _id: string }): string => _id },
-	Band: { id: ({ _id }: { _id: string }): string => _id },
+	Band: {
+		id: ({ _id }: { _id: string }): string => _id,
+		genres(band: Band, args: any, { dataSources }: { dataSources: IDataSources }): Promise<any> {
+			return Promise.all(band.genresIds.map((genreId: string) => dataSources.genreAPI.getGenre(genreId)));
+		},
+	},
 	Genre: { id: ({ _id }: { _id: string }): string => _id },
 	Track: { id: ({ _id }: { _id: string }): string => _id },
 	Favourites: { id: ({ _id }: { _id: string }): string => _id },

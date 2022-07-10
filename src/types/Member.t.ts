@@ -1,8 +1,5 @@
 export interface Member {
-	_id: string;
-	firstName: string;
-	secondName: string;
-	middleName: string;
+	artist: string;
 	instrument: string;
 	years: string[];
 }

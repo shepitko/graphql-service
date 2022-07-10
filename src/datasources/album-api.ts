@@ -1,5 +1,6 @@
 import { RESTDataSource, RequestOptions } from 'apollo-datasource-rest';
 import { Album } from '../types/Album.t';
+import { PaginatedReponse } from '../types/PaginatedResponse.t';
 
 export class AlbumAPI extends RESTDataSource {
 	constructor() {
@@ -11,10 +12,10 @@ export class AlbumAPI extends RESTDataSource {
 		request.headers.set('Authorization', this.context.token);
 	}
 
-	async getAllAlbums(): Promise<Album[]> {
-		const albums = await this.get('albums');
+	async getAllAlbums(limit = 5, offset = 0): Promise<PaginatedReponse<Album>> {
+		const albums = await this.get('albums', { limit, offset });
 
-		return albums.items || [];
+		return albums;
 	}
 
 	async getAlbum(albumId: Number): Promise<Album> {
